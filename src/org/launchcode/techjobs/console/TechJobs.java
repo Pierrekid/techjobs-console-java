@@ -2,6 +2,7 @@ package org.launchcode.techjobs.console;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 /**
@@ -60,10 +61,16 @@ public class TechJobs {
                 System.out.println("\nSearch term: ");
                 String searchTerm = in.nextLine();
 
+
                 if (searchField.equals("all")) {
-                    System.out.println("Search all fields not yet implemented.");
+                    printJobs(JobData.findByValue(searchTerm.toLowerCase()));
                 } else {
-                    printJobs(JobData.findByColumnAndValue(searchField, searchTerm));
+                    ArrayList jobListing = (JobData.findByColumnAndValue(searchField, searchTerm.toLowerCase()));
+                    if (jobListing.size()== 0 )
+                        {System.out.println("That doesn't seem to match any results, please try again");}
+                        else
+                            {printJobs(JobData.findByColumnAndValue(searchField, searchTerm.toLowerCase()));}
+
                 }
             }
         }
@@ -79,6 +86,8 @@ public class TechJobs {
         // Put the choices in an ordered structure so we can
         // associate an integer with each one
         Integer i = 0;
+
+        //choiceKey is a random string. It represents each choice in the "choices" dictionary
         for (String choiceKey : choices.keySet()) {
             choiceKeys[i] = choiceKey;
             i++;
@@ -110,7 +119,22 @@ public class TechJobs {
 
     // Print a list of jobs
     private static void printJobs(ArrayList<HashMap<String, String>> someJobs) {
+// once you get hashmap, print each hashmap
+        for (HashMap<String, String>job : someJobs)
+        {
+            String comp = " ";
 
-        System.out.println("printJobs is not implemented yet");
+            for (Map.Entry<String,String> jobSection: job.entrySet())
+                {String key = jobSection.getKey();
+                 String value =jobSection.getValue();
+                 comp += "\n" + key + ": " + value;
+                 }
+
+              String finalJob = "****" + comp + "\n" + "****" + "\n";
+
+            System.out.println(finalJob);
+        }
+
+
     }
 }
